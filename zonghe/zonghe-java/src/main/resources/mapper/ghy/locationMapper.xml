@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.renren.modules.ghy.supplier.dao.locationMapper">
+    <select id="getSupplierLocationList" resultType="location">
+        SELECT * FROM w_location
+        <where>
+            <if test="name!=null">`name` LIKE concat('%',#{name},'%')</if>
+            <if test="status!=null">AND `status` = #{status}</if>
+        </where>
+        ORDER BY sorts DESC
+        LIMIT #{staLimit}, #{endLimit};
+    </select>
+
+    <!--    统计数量-->
+    <select id="supplierLocationCount" resultType="int">
+        select COUNT(id) as sumCount FROM w_location
+        <where>
+            <if test="name!=null">`name` LIKE concat('%',#{name},'%')</if>
+            <if test="status!=null">AND `status` = #{status}</if>
+        </where>
+    </select>
+
+<!--    添加-->
+    <insert id="insertSupplierLocation">
+        INSERT INTO `w_location`(`name`,`categoryid`,`supplierid1`,`supplierid2`,
+        `supplierid3`,`supplierid4`,`supplierid5`, `supplierid6`, `supplierid7`,
+        `supplierid8`, `status`, `sorts`)
+        VALUES (#{name},#{categoryid},#{supplierid1},#{supplierid2},#{supplierid3},#{supplierid4},
+        #{supplierid5},#{supplierid6},#{supplierid7},#{supplierid8},#{status},#{sorts});
+    </insert>
+
+<!--    条件更新-->
+    <update id="updateSupplierLocation">
+        UPDATE w_location
+        <set>
+            <if test="name!=null">name = #{name},</if>
+            <if test="categoryid!=null">categoryid = #{categoryid},</if>
+            <if test="supplierid1!=null">supplierid1 = #{supplierid1},</if>
+            <if test="supplierid2!=null">supplierid2 = #{supplierid2},</if>
+            <if test="supplierid3!=null">supplierid3 = #{supplierid3},</if>
+            <if test="supplierid4!=null">supplierid4 = #{supplierid4},</if>
+            <if test="supplierid5!=null">supplierid5 = #{supplierid5},</if>
+            <if test="supplierid6!=null">supplierid6 = #{supplierid6},</if>
+            <if test="supplierid7!=null">supplierid7 = #{supplierid7},</if>
+            <if test="supplierid8!=null">supplierid8 = #{supplierid8},</if>
+            <if test="status!=null">status = #{status},</if>
+            <if test="sorts!=-1">sorts = #{sorts},</if>
+        </set>
+        WHERE id=#{id}
+
+    </update>
+
+<!--    通过 “产品编号” 和 “商户id” 获取策略信息-->
+    <resultMap id="locationList" type="java.util.HashMap">
+        <result column="id" property="id"/>
+        <result column="supplierid1" property="supplierid1"/>
+        <result column="supplierid2" property="supplierid2"/>
+        <result column="supplierid3" property="supplierid3"/>
+        <result column="supplierid4" property="supplierid4"/>
+        <result column="supplierid5" property="supplierid5"/>
+        <result column="supplierid6" property="supplierid6"/>
+        <result column="supplierid7" property="supplierid7"/>
+        <result column="supplierid8" property="supplierid8"/>
+    </resultMap>
+    <select id="locationBySnCashierId" resultMap="locationList">
+        SELECT id,supplierid1, supplierid2,supplierid3,supplierid4,supplierid5,supplierid6,
+        supplierid7,supplierid8
+        FROM w_location WHERE
+        id = (
+            SELECT b.location FROM w_goods AS a,w_goods_location AS b
+                WHERE a.id = b.goodsid AND
+                    a.sn = #{sn} AND
+                    b.cashierid=#{cashierid}
+        )
+    </select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.renren.modules.ghy.supplier.dao.supplierListMapper">
+
+    <!-- 条件获取供货商列表  -->
+    <select id="supplierList" resultType="supplier">
+        SELECT * FROM w_supplier
+        <where>
+            <if test="name!=null">
+                `name` LIKE concat('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                AND `status` = #{status}
+            </if>
+        </where>
+        ORDER BY sorts DESC
+        LIMIT #{staLimit}, #{endLimit};
+    </select>
+
+    <!--    统计数量-->
+    <select id="supplierCount" resultType="int">
+        select COUNT(id) as sumCount FROM w_supplier
+        <where>
+            <if test="name!=null">
+                `name` LIKE concat('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 添加-->
+    <insert id="insertSupplier">
+        INSERT INTO w_supplier(sn,`name`,`status`,contact,mobile,address,sex,`set`,istj,sorts)
+        VALUES (#{sn}, #{name},#{status},#{contact},#{mobile},#{address},#{sex},#{set},#{istj},#{sorts});
+    </insert>
+
+<!--    条件修改-->
+    <update id="updateSupplier">
+        UPDATE w_supplier
+        <set>
+            <if test="name!=null">`name` = #{name},</if>
+            <if test="status!=null">`status` = #{status},</if>
+            <if test="contact!=null">contact = #{contact},</if>
+            <if test="mobile!=null">mobile = #{mobile},</if>
+            <if test="address!=null">address = #{address},</if>
+            <if test="sex!=null">sex = #{sex},</if>
+            <if test="set!=null">`set` = #{set},</if>
+            <if test="istj!=null">istj = #{istj},</if>
+            <if test="sorts!=-1">sorts = #{sorts},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--    获取供货商id和name，返回的是hashmap列表即 List<HashMap<?,?>> -->
+    <resultMap id="supplierIdAndName" type="java.util.HashMap">
+        <result property="id" column="id" />
+        <result property="name" column="name"/>
+    </resultMap>
+    <select id="getSupplierIdAndName" resultMap="supplierIdAndName">
+        SELECT id,`name` FROM w_supplier where status = 1
+    </select>
+
+    <!--  根据id获取供货商的回调地址信息,需要注意供货商有可能被禁用问题  -->
+    <select id="getSupplierUrlById" resultType="String">
+        SELECT `set` FROM w_supplier where id = #{id} AND status = 1
+    </select>
+</mapper>
