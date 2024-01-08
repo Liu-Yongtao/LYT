@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.modules.transfer.cashier.mapper.cashierOrderMapper">
+
+
+<!--    条件获取商户订单列表-->
+    <select id="getCashierOrderList" resultType="cashierOrder">
+        SELECT * FROM cashier_order
+        <where>
+            id &lt;= (SELECT id FROM cashier_order
+            <where>
+                <if test="outLogno!=null">AND out_logno = #{outLogno}</if>
+                <if test="cashierId!=null">AND cashier_id = #{cashierId}</if>
+                <if test="account!=null">AND account = #{account}</if>
+                <if test="logno!=null">AND logno = #{logno}</if>
+                <if test="notifyStatus!=null">AND notify_status = #{notifyStatus}</if>
+                <if test="normalStatus!=null">AND normal_status = #{normalStatus}</if>
+                <if test="money!=null">AND money = #{money}</if>
+                <if test="telephoneType!=null">AND telephone_type = #{telephoneType}</if>
+                <if test="type!=null">AND type = #{type}</if>
+                <if test="status!=null">AND status = #{status}</if>
+                 <if test="startTime!=null and endTime!=null">
+                     AND stat_time BETWEEN #{startTime} AND #{endTime}
+                 </if>
+            </where>
+            ORDER BY id DESC LIMIT #{stat},1)
+            <if test="outLogno!=null">AND out_logno = #{outLogno}</if>
+            <if test="cashierId!=null">AND cashier_id = #{cashierId}</if>
+            <if test="account!=null">AND account = #{account}</if>
+            <if test="logno!=null">AND logno = #{logno}</if>
+            <if test="notifyStatus!=null">AND notify_status = #{notifyStatus}</if>
+            <if test="normalStatus!=null">AND normal_status = #{normalStatus}</if>
+            <if test="money!=null">AND money = #{money}</if>
+            <if test="telephoneType!=null">AND telephone_type = #{telephoneType}</if>
+            <if test="type!=null">AND type = #{type}</if>
+            <if test="status!=null">AND status = #{status}</if>
+            <if test="startTime!=null and endTime!=null">
+                AND stat_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        ORDER BY id DESC LIMIT #{end}
+    </select>
+
+<!--    获取总数量-->
+    <resultMap id="sumCount" type="java.util.HashMap">
+        <result property="sumCount" column="sumCount"/>
+        <result property="moneyCount" column="moneyCount"/>
+    </resultMap>
+    <select id="sumCashierOrder" resultMap="sumCount">
+        SELECT COUNT(*) AS sumCount,
+             SUM(money) AS moneyCount FROM cashier_order
+        <where>
+            <if test="outLogno!=null">out_logno = #{outLogno}</if>
+            <if test="cashierId!=null">AND cashier_id = #{cashierId}</if>
+            <if test="account!=null">AND account = #{account}</if>
+            <if test="logno!=null">AND logno = #{logno}</if>
+            <if test="notifyStatus!=null">AND notify_status = #{notifyStatus}</if>
+            <if test="normalStatus!=null">AND normal_status = #{normalStatus}</if>
+            <if test="money!=null">AND money = #{money}</if>
+            <if test="status!=null">AND status = #{status}</if>
+            <if test="type!=null">AND type = #{type}</if>
+            <if test="telephoneType!=null">AND telephone_type = #{telephoneType}</if>
+            <if test="startTime!=null and endTime!=null">
+                AND stat_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+
+<!--    话商进单-->
+    <insert id="inCashierOrder">
+        INSERT INTO cashier_order (cashier_id,out_logno,logno,type,area,telephone_type,
+                                   account, money, sell_money, cost_money, `notify_url`, `stat_time`)
+        VALUES (#{cashierId},#{outLogno},#{logno},#{type},#{area},#{telephoneType},#{account},
+                #{money},#{sellMoney},#{costMoney},#{notifyUrl},#{statTime});
+
+    </insert>
+    
+    <update id="updateCashierOrder">
+        UPDATE cashier_order
+        <set>
+            <if test="status!=null">status = #{status},</if>
+            <if test="notifyStatus!=null">notify_status = #{notifyStatus},</if>
+            <if test="normalStatus!=null">normal_status = #{normalStatus},</if>
+            <if test="passage!=null">passage = #{passage},</if>
+<!--            <if test="node!=null">node = #{node},</if>-->
+            <if test="remake!=null">remake = #{remake},</if>
+            <if test="endTime!=null">end_time = #{endTime},</if>
+        </set>
+        where out_logno = #{outLogno}
+    </update>
+
+<!--    匹配订单-->
+    <select id="normalCashierOrder" resultType="cashierOrder">
+        SELECT id,cashier_id,account,logno from cashier_order where
+            money = #{money} AND type = #{type} AND normal_status = 0
+    </select>
+
+<!--    通过平台订单号获取话商订单-->
+    <select id="getCashierOrderByLogno" resultType="cashierOrder">
+        SELECT * from cashier_order where logno = #{logno}
+    </select>
+    
+</mapper>

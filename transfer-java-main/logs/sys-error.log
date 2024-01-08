@@ -1,0 +1,7 @@
+15:38:38.703 [http-nio-2050-exec-20] ERROR c.r.c.catchExceptionConfig - [exceptionAfter,30] - 类名:org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator,文件名:SQLErrorCodeSQLExceptionTranslator.java,行数:239,办法名:doTranslate
+15:42:29.266 [http-nio-2050-exec-11] ERROR c.r.c.catchExceptionConfig - [exceptionAfter,30] - 类名:org.springframework.jdbc.support.SQLStateSQLExceptionTranslator,文件名:SQLStateSQLExceptionTranslator.java,行数:104,办法名:doTranslate
+15:46:06.122 [http-nio-2050-exec-7] ERROR c.r.c.catchExceptionConfig - [exceptionAfter,30] - 类名:org.springframework.jdbc.support.SQLStateSQLExceptionTranslator,文件名:SQLStateSQLExceptionTranslator.java,行数:104,办法名:doTranslate
+15:47:30.629 [http-nio-2050-exec-1] ERROR c.r.c.catchExceptionConfig - [exceptionAfter,30] - 类名:org.springframework.jdbc.support.SQLStateSQLExceptionTranslator,文件名:SQLStateSQLExceptionTranslator.java,行数:104,办法名:doTranslate
+16:10:19.499 [http-nio-2050-exec-82] ERROR c.r.c.catchExceptionConfig - [exceptionAfter,30] - 类名:org.springframework.jdbc.support.SQLStateSQLExceptionTranslator,文件名:SQLStateSQLExceptionTranslator.java,行数:104,办法名:doTranslate
+16:11:21.808 [http-nio-2050-exec-87] ERROR c.r.c.catchExceptionConfig - [exceptionAfter,30] - 类名:org.springframework.jdbc.support.SQLStateSQLExceptionTranslator,文件名:SQLStateSQLExceptionTranslator.java,行数:104,办法名:doTranslate
+16:11:54.841 [http-nio-2050-exec-88] ERROR c.r.c.catchExceptionConfig - [exceptionAfter,30] - 类名:org.springframework.jdbc.support.SQLStateSQLExceptionTranslator,文件名:SQLStateSQLExceptionTranslator.java,行数:104,办法名:doTranslate

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.modules.transfer.linkSupplier.mapper.linkSupplierOrderMapper">
+
+
+    <!--    条件获取商户订单列表-->
+    <select id="getLinkSupplierOrderList" resultType="linkSupplierOrder">
+        SELECT * FROM link_supplier_order
+        <where>
+            id &lt;= (SELECT id FROM link_supplier_order
+            <where>
+                <if test="cashierId!=null">AND cashier_id = #{cashierId}</if>
+                <if test="account!=null">AND account = #{account}</if>
+                <if test="logno!=null">AND logno = #{logno}</if>
+                 <if test="payLogno!=null">AND pay_logno = #{payLogno}</if>
+                <if test="money!=null">AND money = #{money}</if>
+                <if test="telephoneType!=null">AND telephone_type = #{telephoneType}</if>
+                <if test="status!=null">AND status = #{status}</if>
+                <if test="zfType!=null">AND zf_type = #{zfType}</if>
+                <if test="startTime!=null and endTime!=null">
+                    AND stat_time BETWEEN #{startTime} AND #{endTime}
+                </if>
+            </where>
+            ORDER BY id DESC LIMIT #{stat},1)
+            <if test="cashierId!=null">AND cashier_id = #{cashierId}</if>
+            <if test="account!=null">AND account = #{account}</if>
+            <if test="logno!=null">AND logno = #{logno}</if>
+            <if test="payLogno!=null">AND pay_logno = #{payLogno}</if>
+            <if test="money!=null">AND money = #{money}</if>
+            <if test="telephoneType!=null">AND telephone_type = #{telephoneType}</if>
+            <if test="status!=null">AND status = #{status}</if>
+            <if test="zfType!=null">AND zf_type = #{zfType}</if>
+            <if test="startTime!=null and endTime!=null">
+                AND stat_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        ORDER BY id DESC LIMIT #{end}
+    </select>
+
+    <!--    获取总数量-->
+    <resultMap id="sumCount" type="java.util.HashMap">
+        <result property="sumCount" column="sumCount"/>
+        <result property="moneyCount" column="moneyCount"/>
+    </resultMap>
+    <select id="sumLinkSupplierOrder" resultMap="sumCount">
+        SELECT COUNT(*) AS sumCount,
+        SUM(money) AS moneyCount FROM link_supplier_order
+        <where>
+            <if test="cashierId!=null">AND cashier_id = #{cashierId}</if>
+            <if test="account!=null">AND account = #{account}</if>
+            <if test="logno!=null">AND logno = #{logno}</if>
+            <if test="payLogno!=null">AND pay_logno = #{payLogno}</if>
+            <if test="money!=null">AND money = #{money}</if>
+            <if test="telephoneType!=null">AND telephone_type = #{telephoneType}</if>
+            <if test="status!=null">AND status = #{status}</if>
+            <if test="zfType!=null">AND zf_type = #{zfType}</if>
+            <if test="startTime!=null and endTime!=null">
+                AND stat_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+
+
+<!--    写入数据-->
+    <insert id="insertLinkSupplierOrder">
+        INSERT INTO link_supplier_order (`logno`, `pay_logno`, `account`, `zf_type`,
+        `telephone_type`, `ipaddr`, `money`, `phone_type`, `status`, `pay_url`, `query_url`,
+                                         `location`, `stat_time`, `end_time`, `cashier_id`)
+        VALUES (#{logno},#{payLogno},#{account},#{zfType},#{telephoneType},#{ipaddr},#{money},
+                #{phoneType},#{status},#{payUrl},#{queryUrl},#{location},#{statTime},#{endTime},#{cashierId});
+
+    </insert>
+
+<!--  通过订单号查询查单地址  -->
+    <select id="getQueryOrderByPayLogno" resultType="java.lang.String">
+        SELECT query_url from link_supplier_order where pay_logno = #{payLogno}
+    </select>
+</mapper>

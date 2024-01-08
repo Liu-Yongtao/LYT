@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.modules.transfer.linkSupplier.mapper.linkSupplierUserMapper">
+
+    <!--    条件获取商户列表-->
+    <select id="getLinkSupplierUserList" resultType="linkSupplierUser">
+        SELECT * FROM link_supplier_user
+        <where>
+            <if test="title!=null">AND title like CONCAT('%', #{title}, '%')</if>
+            <if test="type!=null">AND type = #{type}</if>
+            <if test="zfType!=null">AND zf_type = #{zfType}</if>
+            <if test="status!=null">AND status = #{status}</if>
+        </where>
+        ORDER BY sorts DESC limit #{stat},#{end}
+    </select>
+    <!--    统计商户页-->
+    <select id="sumCount" resultType="int">
+        SELECT COUNT(*) AS sumCount FROM link_supplier_user
+        <where>
+            <if test="title!=null">AND title like CONCAT('%', #{title}, '%')</if>
+            <if test="type!=null">AND type = #{type}</if>
+            <if test="zfType!=null">AND zf_type = #{zfType}</if>
+            <if test="status!=null">AND status = #{status}</if>
+        </where>
+    </select>
+
+    <!--    新增-->
+    <insert id="insertLinkSupplierUser">
+        INSERT INTO link_supplier_user (title, user_name,type
+                                 , zf_type,phone_type,lv,url, remake, time, sorts)
+        VALUES (#{title},#{userName},#{type},#{zfType},#{phoneType},#{lv},#{url},#{remake},now(),#{sorts});
+    </insert>
+
+    <!--    更新-->
+    <update id="updateLinkSupplierUser">
+        UPDATE link_supplier_user
+        <set>
+            <if test="title!=null">title = #{title},</if>
+            <if test="userName!=null">user_name = #{userName},</if>
+            <if test="type!=null">type = #{type},</if>
+            <if test="zfType!=null">zf_type = #{zfType},</if>
+            <if test="phoneType!=null">phone_type = #{phoneType},</if>
+            <if test="status!=null">status = #{status},</if>
+            <if test="url!=null">url = #{url},</if>
+            <if test="lv!=null">lv = #{lv},</if>
+            <if test="remake!=null">remake = #{remake},</if>
+            <if test="sorts!=null">sorts = #{sorts},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+<!--    获取所有已开启的供应商-->
+    <select id="getLinkSupplierUserByStatus" resultType="linkSupplierUser">
+        select id,title,zf_type,phone_type,type from link_supplier_user where status = 1
+    </select>
+
+    <select id="getLinkSupplierUserById" resultType="linkSupplierUser">
+        select * from link_supplier_user where id = #{id} AND status = 1
+    </select>
+
+</mapper>

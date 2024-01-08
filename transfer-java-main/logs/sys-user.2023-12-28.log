@@ -1,0 +1,7 @@
+15:03:18.450 [SpringApplicationShutdownHook] INFO  sys-user - [shutdownAsyncManager,32] - ====关闭后台任务任务线程池====
+15:16:30.460 [Thread-19] INFO  sys-user - [shutdownAsyncManager,32] - ====关闭后台任务任务线程池====
+15:16:42.536 [Thread-29] INFO  sys-user - [shutdownAsyncManager,32] - ====关闭后台任务任务线程池====
+15:45:23.851 [schedule-pool-2] INFO  sys-user - [run,56] - [127.0.0.1]内网IP[admin][Error][密码输入错误1次]
+15:45:23.861 [schedule-pool-1] INFO  sys-user - [run,56] - [127.0.0.1]内网IP[admin][Error][用户不存在/密码错误]
+15:45:25.708 [schedule-pool-1] INFO  sys-user - [run,56] - [127.0.0.1]内网IP[admin][Success][登录成功]
+16:48:12.550 [SpringApplicationShutdownHook] INFO  sys-user - [shutdownAsyncManager,32] - ====关闭后台任务任务线程池====
